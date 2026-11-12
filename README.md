@@ -35,7 +35,7 @@ Requirements: Flutter 3.27 (stable) or newer. For iPhone builds: macOS with Xcod
 The `android/` platform folder is included, so on Android it runs straight away:
 
 ```
-git clone https://github.com/<your-username>/flatter_exam_1.git
+git clone https://github.com/Ramiz-Diab/flatter_exam_1.git
 cd flatter_exam_1
 flutter pub get
 flutter run            # pick an Android emulator or device
