@@ -2,6 +2,7 @@
 // sorting) and widget tests for the screen (average and pass count,
 // +/- buttons, the 0 limit, and sorting).
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flatter_exam_1/main.dart';
 
@@ -29,8 +30,10 @@ void main() {
     });
 
     test('passed is true at and above the pass grade', () {
-      expect(const Student(id: 'p', name: 'P', grade: kPassGrade).passed, isTrue);
-      expect(const Student(id: 'q', name: 'Q', grade: kPassGrade - 1).passed, isFalse);
+      expect(
+          const Student(id: 'p', name: 'P', grade: kPassGrade).passed, isTrue);
+      expect(const Student(id: 'q', name: 'Q', grade: kPassGrade - 1).passed,
+          isFalse);
     });
 
     test('averageGrade computes the mean, and 0 for an empty list', () {
@@ -42,7 +45,8 @@ void main() {
       expect(passedCount(students), 2); // 90 and 55 pass, 40 fails
     });
 
-    test('sortByGrade returns a new sorted list without mutating the input', () {
+    test('sortByGrade returns a new sorted list without mutating the input',
+        () {
       final asc = sortByGrade(students, ascending: true);
       expect(asc.map((s) => s.grade), [40, 55, 90]);
 
@@ -65,7 +69,8 @@ void main() {
       expect(find.text('2 / 4'), findsOneWidget);
     });
 
-    testWidgets('tapping + raises a grade and updates the average', (tester) async {
+    testWidgets('tapping + raises a grade and updates the average',
+        (tester) async {
       await tester.pumpWidget(const GradesApp());
       await tester.pumpAndSettle();
 
@@ -76,6 +81,12 @@ void main() {
     });
 
     testWidgets('a grade never drops below 0', (tester) async {
+      // Phone-sized screen so the last row is on screen and can be tapped
+      // (the default 800x600 test view cuts it off).
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(tester.view.reset);
+
       await tester.pumpWidget(const GradesApp());
       await tester.pumpAndSettle();
 
@@ -90,7 +101,8 @@ void main() {
       expect(find.text('0'), findsOneWidget);
     });
 
-    testWidgets('sorting toggles ascending and descending order', (tester) async {
+    testWidgets('sorting toggles ascending and descending order',
+        (tester) async {
       await tester.pumpWidget(const GradesApp());
       await tester.pumpAndSettle();
 

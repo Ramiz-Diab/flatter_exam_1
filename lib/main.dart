@@ -72,13 +72,15 @@ class Palette {
   static ThemeData theme(Brightness brightness) {
     return ThemeData(
       brightness: brightness,
-      scaffoldBackgroundColor:
-          brightness == Brightness.dark ? Colors.black : const Color(0xFFF2F2F7),
+      scaffoldBackgroundColor: brightness == Brightness.dark
+          ? Colors.black
+          : const Color(0xFFF2F2F7),
       useMaterial3: true,
     );
   }
 
-  static bool _dark(BuildContext c) => Theme.of(c).brightness == Brightness.dark;
+  static bool _dark(BuildContext c) =>
+      Theme.of(c).brightness == Brightness.dark;
 
   static Color green(BuildContext c) =>
       _dark(c) ? const Color(0xFF30D158) : const Color(0xFF248A3D);
@@ -86,16 +88,22 @@ class Palette {
       _dark(c) ? const Color(0xFFFF453A) : const Color(0xFFD70015);
   static Color blue(BuildContext c) =>
       _dark(c) ? const Color(0xFF0A84FF) : const Color(0xFF007AFF);
-  static Color label(BuildContext c) => _dark(c) ? Colors.white : const Color(0xFF1C1C1E);
+  static Color label(BuildContext c) =>
+      _dark(c) ? Colors.white : const Color(0xFF1C1C1E);
   static Color secondaryLabel(BuildContext c) =>
-      (_dark(c) ? Colors.white : const Color(0xFF3C3C43)).withOpacity(0.6);
+      (_dark(c) ? Colors.white : const Color(0xFF3C3C43))
+          .withValues(alpha: 0.6);
   static Color track(BuildContext c) =>
-      (_dark(c) ? Colors.white : const Color(0xFF3C3C43)).withOpacity(0.16);
-  static Color cardFill(BuildContext c) =>
-      _dark(c) ? const Color(0xFF1C1C1E).withOpacity(0.68) : Colors.white.withOpacity(0.72);
-  static Color cardSolid(BuildContext c) => _dark(c) ? const Color(0xFF1C1C1E) : Colors.white;
-  static Color hairline(BuildContext c) =>
-      _dark(c) ? Colors.white.withOpacity(0.14) : Colors.white.withOpacity(0.9);
+      (_dark(c) ? Colors.white : const Color(0xFF3C3C43))
+          .withValues(alpha: 0.16);
+  static Color cardFill(BuildContext c) => _dark(c)
+      ? const Color(0xFF1C1C1E).withValues(alpha: 0.68)
+      : Colors.white.withValues(alpha: 0.72);
+  static Color cardSolid(BuildContext c) =>
+      _dark(c) ? const Color(0xFF1C1C1E) : Colors.white;
+  static Color hairline(BuildContext c) => _dark(c)
+      ? Colors.white.withValues(alpha: 0.14)
+      : Colors.white.withValues(alpha: 0.9);
 }
 
 // ---------------------------------------------------------------------------
@@ -130,7 +138,8 @@ double averageGrade(List<Student> students) {
 }
 
 /// How many students meet [kPassGrade].
-int passedCount(List<Student> students) => students.where((s) => s.passed).length;
+int passedCount(List<Student> students) =>
+    students.where((s) => s.passed).length;
 
 /// A new, sorted copy of [students] by grade. The input list is never
 /// mutated.
@@ -201,7 +210,8 @@ class _GradesScreenState extends State<GradesScreen> {
   Widget build(BuildContext context) {
     final order = _displayOrder;
     final total = _students.length;
-    final listHeight = total == 0 ? 0.0 : total * kRowHeight + (total - 1) * kRowGap;
+    final listHeight =
+        total == 0 ? 0.0 : total * kRowHeight + (total - 1) * kRowGap;
 
     return Scaffold(
       body: Stack(
@@ -225,10 +235,13 @@ class _GradesScreenState extends State<GradesScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Expanded(child: _AverageTile(average: averageGrade(_students))),
+                      Expanded(
+                          child:
+                              _AverageTile(average: averageGrade(_students))),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: _PassRingTile(passed: passedCount(_students), total: total),
+                        child: _PassRingTile(
+                            passed: passedCount(_students), total: total),
                       ),
                     ],
                   ),
@@ -295,7 +308,9 @@ class _GlassCard extends StatelessWidget {
     final card = Container(
       padding: padding,
       decoration: BoxDecoration(
-        color: highContrast ? Palette.cardSolid(context) : Palette.cardFill(context),
+        color: highContrast
+            ? Palette.cardSolid(context)
+            : Palette.cardFill(context),
         border: Border.all(color: Palette.hairline(context)),
         borderRadius: BorderRadius.circular(18),
       ),
@@ -343,7 +358,9 @@ class _AverageTile extends StatelessWidget {
               label: 'ממוצע כיתתי ${average.toStringAsFixed(1)}',
               child: TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: average),
-                duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 450),
+                duration: reduceMotion
+                    ? Duration.zero
+                    : const Duration(milliseconds: 450),
                 curve: Curves.easeOutCubic,
                 builder: (context, value, _) => Text(
                   value.toStringAsFixed(1),
@@ -399,7 +416,9 @@ class _PassRingTile extends StatelessWidget {
               children: [
                 TweenAnimationBuilder<double>(
                   tween: Tween(begin: 0, end: fraction),
-                  duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 500),
+                  duration: reduceMotion
+                      ? Duration.zero
+                      : const Duration(milliseconds: 500),
                   curve: Curves.easeOutCubic,
                   builder: (context, value, _) => CustomPaint(
                     size: const Size(76, 76),
@@ -443,7 +462,8 @@ class _PassRingTile extends StatelessWidget {
             textDirection: TextDirection.ltr,
             child: Text(
               'ציון עובר: $kPassGrade',
-              style: TextStyle(fontSize: 11, color: Palette.secondaryLabel(context)),
+              style: TextStyle(
+                  fontSize: 11, color: Palette.secondaryLabel(context)),
             ),
           ),
         ],
@@ -484,7 +504,8 @@ class _RingPainter extends CustomPainter {
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
     final sweep = 2 * math.pi * fraction;
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -math.pi / 2, sweep, false, fill);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
+        -math.pi / 2, sweep, false, fill);
   }
 
   @override
@@ -510,7 +531,8 @@ class _AnimatedRowSlot extends StatelessWidget {
   Widget build(BuildContext context) {
     final reduceMotion = MediaQuery.of(context).disableAnimations;
     return AnimatedPositioned(
-      duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 350),
+      duration:
+          reduceMotion ? Duration.zero : const Duration(milliseconds: 350),
       curve: Curves.easeOutCubic,
       top: index * (kRowHeight + kRowGap),
       left: 0,
@@ -548,13 +570,16 @@ class StudentRow extends StatelessWidget {
             width: 28,
             height: 28,
             alignment: Alignment.center,
-            decoration: BoxDecoration(color: statusColor.withOpacity(0.18), shape: BoxShape.circle),
+            decoration: BoxDecoration(
+                color: statusColor.withValues(alpha: 0.18),
+                shape: BoxShape.circle),
             child: Semantics(
               label: pass ? 'עבר' : 'נכשל',
               child: ExcludeSemantics(
                 child: Text(
                   pass ? '✓' : '✗',
-                  style: TextStyle(color: statusColor, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: statusColor, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -596,7 +621,8 @@ class StudentRow extends StatelessWidget {
                 const SizedBox(height: 6),
                 LayoutBuilder(
                   builder: (context, constraints) {
-                    final reduceMotion = MediaQuery.of(context).disableAnimations;
+                    final reduceMotion =
+                        MediaQuery.of(context).disableAnimations;
                     return Stack(
                       children: [
                         Container(
@@ -607,8 +633,9 @@ class StudentRow extends StatelessWidget {
                           ),
                         ),
                         AnimatedContainer(
-                          duration:
-                              reduceMotion ? Duration.zero : const Duration(milliseconds: 350),
+                          duration: reduceMotion
+                              ? Duration.zero
+                              : const Duration(milliseconds: 350),
                           curve: Curves.easeOutCubic,
                           height: 6,
                           width: constraints.maxWidth * (student.grade / 100),
@@ -643,7 +670,8 @@ class _Stepper extends StatelessWidget {
   final VoidCallback onPlus;
   final String name;
 
-  const _Stepper({required this.onMinus, required this.onPlus, required this.name});
+  const _Stepper(
+      {required this.onMinus, required this.onPlus, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -652,13 +680,20 @@ class _Stepper extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Container(
-          decoration: BoxDecoration(border: Border.all(color: Palette.hairline(context))),
+          decoration: BoxDecoration(
+              border: Border.all(color: Palette.hairline(context))),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _StepButton(symbol: '−', onTap: onMinus, semanticLabel: 'הפחתת ציון ל$name'),
+              _StepButton(
+                  symbol: '−',
+                  onTap: onMinus,
+                  semanticLabel: 'הפחתת ציון ל$name'),
               Container(width: 1, height: 44, color: Palette.hairline(context)),
-              _StepButton(symbol: '+', onTap: onPlus, semanticLabel: 'הוספת ציון ל$name'),
+              _StepButton(
+                  symbol: '+',
+                  onTap: onPlus,
+                  semanticLabel: 'הוספת ציון ל$name'),
             ],
           ),
         ),
@@ -673,7 +708,8 @@ class _StepButton extends StatelessWidget {
   final VoidCallback onTap;
   final String semanticLabel;
 
-  const _StepButton({required this.symbol, required this.onTap, required this.semanticLabel});
+  const _StepButton(
+      {required this.symbol, required this.onTap, required this.semanticLabel});
 
   @override
   Widget build(BuildContext context) {
@@ -688,7 +724,8 @@ class _StepButton extends StatelessWidget {
           alignment: Alignment.center,
           color: Palette.track(context),
           child: ExcludeSemantics(
-            child: Text(symbol, style: TextStyle(fontSize: 18, color: Palette.label(context))),
+            child: Text(symbol,
+                style: TextStyle(fontSize: 18, color: Palette.label(context))),
           ),
         ),
       ),
@@ -741,7 +778,8 @@ class _SortButton extends StatelessWidget {
               AnimatedRotation(
                 turns: direction == SortDirection.ascending ? 0.5 : 0,
                 duration: const Duration(milliseconds: 250),
-                child: Icon(Icons.arrow_upward_rounded, size: 16, color: Palette.blue(context)),
+                child: Icon(Icons.arrow_upward_rounded,
+                    size: 16, color: Palette.blue(context)),
               ),
             ],
           ),
